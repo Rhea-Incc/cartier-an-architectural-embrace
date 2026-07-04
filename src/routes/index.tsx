@@ -5,20 +5,22 @@ import { Nav } from "@/components/Nav";
 import { SoftCursor } from "@/components/SoftCursor";
 import { Reveal } from "@/components/Reveal";
 
-import vid2 from "@/assets/vid-2.mp4.asset.json";
-import vid3 from "@/assets/vid-3.mp4.asset.json";
-import aerial from "@/assets/1.0.png.asset.json";
-import towerNight from "@/assets/05.png.asset.json";
-import balcony from "@/assets/08-2.png.asset.json";
-import entrance from "@/assets/07.png.asset.json";
-import towerLow from "@/assets/09.png.asset.json";
-import estateTop from "@/assets/Cartier..png.asset.json";
-import interior from "@/assets/cartier-02.jpg.asset.json";
-import towerDay from "@/assets/cartier.jpg.asset.json";
-import wordmark from "@/assets/wordmark.png.asset.json";
-import logo from "@/assets/logo.png.asset.json";
-
 export const Route = createFileRoute("/")({ component: Index });
+
+const media = {
+  vid2: "/media/vid-2.mp4",
+  vid3: "/media/vid-3.mp4",
+  aerial: "/media/1.0.png",
+  towerNight: "/media/09.png",
+  balcony: "/media/08-2.png",
+  entrance: "/media/07.png",
+  towerLow: "/media/cartier.jpg",
+  estateTop: "/media/Cartier..png",
+  interior: "/media/cartier-02.jpg",
+  towerDay: "/media/09.png",
+  wordmark: "/media/wordmark.png",
+  logo: "/media/logo.png",
+};
 
 const journey = [
   "The Collection",
@@ -36,21 +38,21 @@ const editionData = [
   {
     id: "Edition 03",
     title: "Canopy Edition",
-    image: towerLow.url,
+    image: media.towerLow,
     line: "Morning enters quietly.",
     detail: "North-east orientation · elevated garden threshold",
   },
   {
     id: "Edition 07",
     title: "Horizon Edition",
-    image: entrance.url,
+    image: media.entrance,
     line: "Every curve softens light.",
     detail: "South-west orientation · sunset corridor",
   },
   {
     id: "Edition 11",
     title: "Atelier Edition",
-    image: towerNight.url,
+    image: media.towerNight,
     line: "Silence arrives before the sun.",
     detail: "Sea-facing volume · dual terrace sequence",
   },
@@ -75,7 +77,7 @@ function HeroBelonging() {
     <section id="top" ref={ref} className="relative h-[115vh] overflow-hidden">
       <motion.div style={{ scale, opacity }} className="absolute inset-0">
         <video
-          src={vid2.url}
+          src={media.vid2}
           autoPlay
           muted
           loop
@@ -93,7 +95,7 @@ function HeroBelonging() {
           </Reveal>
           <Reveal delay={0.15}>
             <div className="mt-8">
-              <img src={wordmark.url} alt="Cartier" className="mx-auto h-14 w-auto md:h-24" />
+              <img src={media.wordmark} alt="Cartier" className="mx-auto h-14 w-auto md:h-24" loading="eager" />
             </div>
           </Reveal>
           <Reveal delay={0.3}>
@@ -190,7 +192,7 @@ function EditionsSection() {
           </Reveal>
 
           <div className="mt-10 border-t border-border">
-            {editionData.map((edition, idx) => (
+            {editionData.map((edition) => (
               <button
                 key={edition.id}
                 type="button"
@@ -210,7 +212,7 @@ function EditionsSection() {
 
         <Reveal delay={0.15} className="lg:col-span-8">
           <div className="relative aspect-[16/10] overflow-hidden">
-            <img src={selected.image} alt={selected.title} className="h-full w-full object-cover" />
+            <img src={selected.image} alt={selected.title} className="h-full w-full object-cover" loading="lazy" />
             <div className="absolute inset-0 bg-gradient-to-t from-background/70 to-transparent" />
             <div className="absolute left-6 right-6 bottom-6 md:left-10 md:right-10 md:bottom-10">
               <p className="font-mono-caps text-accent">{selected.id}</p>
@@ -242,7 +244,7 @@ function ResidenceSection() {
       <Reveal delay={0.2} className="mt-14">
         <div className="relative aspect-[16/9] w-full overflow-hidden">
           <video
-            src={vid3.url}
+            src={media.vid3}
             autoPlay
             muted
             loop
@@ -269,12 +271,12 @@ function AtmosphereSection() {
         <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-12">
           <Reveal className="md:col-span-8">
             <figure className="relative aspect-[16/10] overflow-hidden">
-              <img src={balcony.url} alt="Balcony over the estate at dusk" loading="lazy" className="h-full w-full object-cover" />
+              <img src={media.balcony} alt="Balcony over the estate at dusk" loading="lazy" className="h-full w-full object-cover" />
             </figure>
           </Reveal>
           <Reveal delay={0.1} className="md:col-span-4">
             <figure className="relative aspect-[4/5] overflow-hidden">
-              <img src={interior.url} alt="Interior with sculptural lines and reflective stone" loading="lazy" className="h-full w-full object-cover" />
+              <img src={media.interior} alt="Interior with sculptural lines and reflective stone" loading="lazy" className="h-full w-full object-cover" />
             </figure>
           </Reveal>
         </div>
@@ -307,7 +309,7 @@ function InvisibleLuxurySection() {
               });
             }}
           >
-            <img src={entrance.url} alt="Stone and bronze detailing" loading="lazy" className="h-full w-full object-cover" />
+            <img src={media.entrance} alt="Stone and bronze detailing" loading="lazy" className="h-full w-full object-cover" />
             <div
               className="absolute inset-0 transition-opacity duration-500"
               style={{
@@ -375,10 +377,10 @@ function EstateSection() {
 
         <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-12">
           <motion.figure style={{ y }} className="md:col-span-7 aspect-[16/10] overflow-hidden">
-            <img src={estateTop.url} alt="Aerial estate composition" loading="lazy" className="h-full w-full object-cover" />
+            <img src={media.estateTop} alt="Aerial estate composition" loading="lazy" className="h-full w-full object-cover" />
           </motion.figure>
           <motion.figure style={{ y: useTransform(scrollYProgress, [0, 1], [-30, 50]) }} className="md:col-span-5 aspect-[4/5] overflow-hidden md:mt-20">
-            <img src={towerDay.url} alt="Curved residence geometry" loading="lazy" className="h-full w-full object-cover" />
+            <img src={media.towerDay} alt="Curved residence geometry" loading="lazy" className="h-full w-full object-cover" />
           </motion.figure>
         </div>
       </div>
@@ -410,7 +412,7 @@ function AvailabilitySection() {
         <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-12">
           <Reveal className="lg:col-span-8">
             <figure className="relative aspect-[16/10] overflow-hidden">
-              <img src={towerNight.url} alt="Cartier tower night elevation" loading="lazy" className="h-full w-full object-cover" />
+              <img src={media.towerNight} alt="Cartier tower night elevation" loading="lazy" className="h-full w-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent" />
             </figure>
           </Reveal>
@@ -442,7 +444,7 @@ function ReservationSection() {
   return (
     <section id="reservation" className="relative overflow-hidden px-6 py-24 md:py-36">
       <div className="absolute inset-0">
-        <img src={aerial.url} alt="Night aerial Cartier" className="h-full w-full object-cover" loading="lazy" />
+        <img src={media.aerial} alt="Night aerial Cartier" className="h-full w-full object-cover" loading="lazy" />
         <div className="absolute inset-0 bg-background/78" />
       </div>
 
@@ -520,8 +522,8 @@ function Footer() {
     <footer className="border-t border-border px-6 pb-14 pt-20">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 md:grid-cols-12">
         <div className="md:col-span-5">
-          <img src={logo.url} alt="Cartier emblem" className="h-20 w-auto opacity-90" loading="lazy" />
-          <img src={wordmark.url} alt="Cartier" className="mt-4 h-4 w-auto opacity-80" loading="lazy" />
+          <img src={media.logo} alt="Cartier emblem" className="h-20 w-auto opacity-90" loading="lazy" />
+          <img src={media.wordmark} alt="Cartier" className="mt-4 h-4 w-auto opacity-80" loading="lazy" />
           <p className="mt-5 max-w-sm font-display text-xl italic text-foreground/65">
             Belonging is not purchased. It is recognized.
           </p>

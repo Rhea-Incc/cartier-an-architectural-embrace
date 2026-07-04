@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import wordmark from "@/assets/wordmark.png.asset.json";
+
+const wordmarkUrl = "/media/wordmark.png";
 
 const links = [
   { label: "Collection", href: "#collection" },
@@ -35,7 +36,7 @@ export function Nav() {
       >
         <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4">
           <a href="#top" className="min-w-0" data-hover>
-            <img src={wordmark.url} alt="Cartier" className="h-4 w-auto max-w-full opacity-90 md:h-[18px]" />
+            <img src={wordmarkUrl} alt="Cartier" className="h-4 w-auto max-w-full opacity-90 md:h-[18px]" loading="eager" />
           </a>
 
           <nav className="hidden items-center gap-8 lg:flex">
