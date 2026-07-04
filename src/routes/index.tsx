@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Nav } from "@/components/Nav";
 import { SoftCursor } from "@/components/SoftCursor";
 import { Reveal } from "@/components/Reveal";
@@ -8,33 +8,71 @@ import { Reveal } from "@/components/Reveal";
 import vid2 from "@/assets/vid-2.mp4.asset.json";
 import vid3 from "@/assets/vid-3.mp4.asset.json";
 import aerial from "@/assets/1.0.png.asset.json";
-import pool1 from "@/assets/1.2.png.asset.json";
-import pool2 from "@/assets/1.3.png.asset.json";
-import tower1 from "@/assets/04.png.asset.json";
-import tower2 from "@/assets/05.png.asset.json";
-import terrace from "@/assets/08.png.asset.json";
+import towerNight from "@/assets/05.png.asset.json";
+import balcony from "@/assets/08-2.png.asset.json";
+import entrance from "@/assets/07.png.asset.json";
+import towerLow from "@/assets/09.png.asset.json";
+import estateTop from "@/assets/Cartier..png.asset.json";
+import interior from "@/assets/cartier-02.jpg.asset.json";
+import towerDay from "@/assets/cartier.jpg.asset.json";
 import wordmark from "@/assets/wordmark.png.asset.json";
 import logo from "@/assets/logo.png.asset.json";
 
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { property: "og:image", content: tower1.url },
-      { name: "twitter:image", content: tower1.url },
-    ],
-  }),
-  component: Index,
-});
+export const Route = createFileRoute("/")({ component: Index });
 
-function Hero() {
+const journey = [
+  "The Collection",
+  "Editions",
+  "The Residence",
+  "The Atmosphere",
+  "Invisible Luxury",
+  "Wellbeing",
+  "The Estate",
+  "Availability",
+  "Reservation",
+];
+
+const editionData = [
+  {
+    id: "Edition 03",
+    title: "Canopy Edition",
+    image: towerLow.url,
+    line: "Morning enters quietly.",
+    detail: "North-east orientation · elevated garden threshold",
+  },
+  {
+    id: "Edition 07",
+    title: "Horizon Edition",
+    image: entrance.url,
+    line: "Every curve softens light.",
+    detail: "South-west orientation · sunset corridor",
+  },
+  {
+    id: "Edition 11",
+    title: "Atelier Edition",
+    image: towerNight.url,
+    line: "Silence arrives before the sun.",
+    detail: "Sea-facing volume · dual terrace sequence",
+  },
+];
+
+const availability = [
+  { id: "Edition 03", state: "available" },
+  { id: "Edition 05", state: "reserved" },
+  { id: "Edition 07", state: "available" },
+  { id: "Edition 09", state: "sold" },
+  { id: "Edition 11", state: "reserved" },
+  { id: "Edition 14", state: "private" },
+];
+
+function HeroBelonging() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
   const opacity = useTransform(scrollYProgress, [0, 0.9], [1, 0]);
-  const y = useTransform(scrollYProgress, [0, 1], [0, 160]);
 
   return (
-    <section ref={ref} id="top" className="relative h-[110vh] w-full overflow-hidden">
+    <section id="top" ref={ref} className="relative h-[115vh] overflow-hidden">
       <motion.div style={{ scale, opacity }} className="absolute inset-0">
         <video
           src={vid2.url}
@@ -45,165 +83,30 @@ function Hero() {
           preload="auto"
           className="h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/10 to-background" />
-        <div className="absolute inset-0 vignette" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/65 via-background/20 to-background" />
       </motion.div>
 
-      <motion.div
-        style={{ y, opacity }}
-        className="relative z-10 flex h-screen flex-col items-center justify-center px-6 text-center"
-      >
-        <div className="slow-fade" style={{ animationDelay: "0.2s" }}>
-          <p className="font-mono-caps text-accent/80">Est · MMXXV · Coastal Reserve</p>
-        </div>
-        <div className="slow-fade mt-10" style={{ animationDelay: "0.9s" }}>
-          <img src={wordmark.url} alt="Cartier" className="h-14 md:h-24 w-auto mx-auto" />
-        </div>
-        <div className="slow-fade mt-10 max-w-xl" style={{ animationDelay: "1.6s" }}>
-          <p className="font-display italic text-xl md:text-2xl text-foreground/80 leading-relaxed">
-            Some places are discovered.
-            <br />
-            Others remember you.
-          </p>
-        </div>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.4, duration: 2 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-3"
-      >
-        <span className="font-mono-caps text-foreground/50">Descend</span>
-        <div className="h-16 w-px bg-gradient-to-b from-accent/60 to-transparent shimmer" />
-      </motion.div>
-    </section>
-  );
-}
-
-function Manifesto() {
-  return (
-    <section className="relative py-40 md:py-56 px-6">
-      <div className="mx-auto max-w-4xl text-center">
-        <Reveal>
-          <p className="font-mono-caps text-accent/70 mb-10">I · A Prelude</p>
-        </Reveal>
-        <Reveal delay={0.2}>
-          <h2 className="font-display text-4xl md:text-6xl leading-[1.15] text-foreground/95">
-            Architecture remembers what buildings forget.
-            <span className="block mt-6 italic text-foreground/60">
-              Cartier is not built to impress. It is composed to remain.
-            </span>
-          </h2>
-        </Reveal>
-        <Reveal delay={0.5}>
-          <div className="mt-16 mx-auto w-40 hairline" />
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-function Architecture() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [-40, 80]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1.08, 1]);
-
-  return (
-    <section id="architecture" ref={ref} className="relative min-h-[130vh] px-6 py-32 overflow-hidden">
-      <div className="mx-auto max-w-7xl">
-        <div className="grid grid-cols-12 gap-y-12 items-end mb-16">
-          <Reveal className="col-span-12 md:col-span-5">
-            <p className="font-mono-caps text-accent/70 mb-6">II · The Object</p>
-            <h3 className="font-display text-5xl md:text-7xl leading-[1] text-foreground">
-              Sculpted<br />
-              <em className="text-accent-soft">into</em> the earth.
-            </h3>
-          </Reveal>
-          <Reveal delay={0.2} className="col-span-12 md:col-span-5 md:col-start-8">
-            <p className="font-display text-lg md:text-xl italic text-foreground/70 leading-relaxed">
-              Twelve organic volumes emerge from the canopy — a single, continuous gesture of stone, glass, and light. Every curve resolves a horizon.
-            </p>
-            <div className="mt-8 flex gap-10 font-mono-caps text-foreground/60">
-              <div>
-                <div className="text-accent text-lg font-display not-italic mb-1">14</div>
-                Storeys
-              </div>
-              <div>
-                <div className="text-accent text-lg font-display not-italic mb-1">86</div>
-                Residences
-              </div>
-              <div>
-                <div className="text-accent text-lg font-display not-italic mb-1">03</div>
-                Pavilions
-              </div>
-            </div>
-          </Reveal>
-        </div>
-
-        <Reveal delay={0.1}>
-          <motion.div
-            style={{ y, scale }}
-            className="relative aspect-[16/10] w-full overflow-hidden"
-          >
-            <img
-              src={aerial.url}
-              alt="Aerial architectural composition of Cartier"
-              className="h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
-            <div className="absolute bottom-8 left-8 font-mono-caps text-foreground/70">
-              Fig. 01 — Site plan · aerial · dusk
-            </div>
-          </motion.div>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-function Tower() {
-  return (
-    <section className="relative px-6 py-32 md:py-48">
-      <div className="mx-auto max-w-7xl grid grid-cols-12 gap-8 md:gap-16 items-center">
-        <Reveal className="col-span-12 md:col-span-7 order-2 md:order-1">
-          <div className="relative aspect-[3/4] overflow-hidden">
-            <img
-              src={tower2.url}
-              alt="Cartier tower elevation at blue hour"
-              className="h-full w-full object-cover gentle-drift"
-            />
-          </div>
-        </Reveal>
-
-        <div className="col-span-12 md:col-span-5 order-1 md:order-2">
+      <div className="relative z-10 flex h-full items-center justify-center px-6 text-center">
+        <div className="max-w-4xl">
           <Reveal>
-            <p className="font-mono-caps text-accent/70 mb-6">III · Elevation</p>
+            <p className="font-mono-caps text-accent/80">Phase 02 · Belonging</p>
           </Reveal>
           <Reveal delay={0.15}>
-            <h3 className="font-display text-4xl md:text-6xl leading-[1.05] text-foreground">
-              Light becomes<br />structure.
-            </h3>
+            <div className="mt-8">
+              <img src={wordmark.url} alt="Cartier" className="mx-auto h-14 w-auto md:h-24" />
+            </div>
           </Reveal>
           <Reveal delay={0.3}>
-            <p className="font-display italic text-lg text-foreground/70 mt-8 leading-relaxed">
-              At dusk the façade shifts from stone to lantern. Warm light traces each rounded aperture, transforming architecture into a vertical horizon.
-            </p>
+            <h1 className="mt-10 font-display text-4xl italic leading-[1.08] text-foreground md:text-7xl">
+              Architecture is no longer the destination.
+              <span className="mt-4 block text-foreground/70">It has become the setting for belonging.</span>
+            </h1>
           </Reveal>
           <Reveal delay={0.45}>
-            <div className="mt-10 space-y-4 border-t border-border pt-8">
-              {[
-                ["Material", "Cast lime concrete, bronze"],
-                ["Glazing", "Full-height, low-iron"],
-                ["Balconies", "Monolithic curvature"],
-                ["Orientation", "West · Sea · Mountain"],
-              ].map(([k, v]) => (
-                <div key={k} className="grid grid-cols-2 gap-4 text-sm">
-                  <span className="font-mono-caps text-foreground/50">{k}</span>
-                  <span className="font-display italic text-foreground/85">{v}</span>
-                </div>
-              ))}
+            <div className="mx-auto mt-12 max-w-2xl">
+              <p className="font-display text-xl italic text-foreground/70 md:text-2xl">
+                The visitor stops observing Cartier and quietly begins living inside it.
+              </p>
             </div>
           </Reveal>
         </div>
@@ -212,241 +115,400 @@ function Tower() {
   );
 }
 
-function Grounds() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y1 = useTransform(scrollYProgress, [0, 1], [80, -80]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [-40, 60]);
-
+function JourneyRail() {
   return (
-    <section id="grounds" ref={ref} className="relative px-6 py-32 md:py-48 overflow-hidden">
-      <div className="mx-auto max-w-7xl">
-        <div className="grid grid-cols-12 gap-8 mb-24">
-          <Reveal className="col-span-12 md:col-span-6">
-            <p className="font-mono-caps text-accent/70 mb-6">IV · The Grounds</p>
-            <h3 className="font-display text-5xl md:text-7xl leading-[1]">
-              Silence<br />
-              has a <em className="text-accent-soft">shape.</em>
-            </h3>
-          </Reveal>
-          <Reveal delay={0.2} className="col-span-12 md:col-span-5 md:col-start-8 self-end">
-            <p className="font-display italic text-lg text-foreground/70 leading-relaxed">
-              Infinity pools follow the coastline. Terraces descend into gardens where the sea is heard before it is seen.
-            </p>
-          </Reveal>
-        </div>
-
-        <div className="grid grid-cols-12 gap-6">
-          <motion.div style={{ y: y1 }} className="col-span-12 md:col-span-7 aspect-[16/10] overflow-hidden">
-            <img src={pool1.url} alt="Curved infinity pool at blue hour" className="h-full w-full object-cover" />
-          </motion.div>
-          <motion.div style={{ y: y2 }} className="col-span-12 md:col-span-5 aspect-[4/5] overflow-hidden md:mt-24">
-            <img src={pool2.url} alt="Terrace lounge with candlelight" className="h-full w-full object-cover" />
-          </motion.div>
-        </div>
-
-        <Reveal delay={0.2}>
-          <div className="mt-32 grid grid-cols-12 gap-8">
-            <div className="col-span-12 md:col-span-4 md:col-start-2">
-              <p className="font-mono-caps text-accent/70 mb-4">Composition</p>
-              <p className="font-display italic text-foreground/80 leading-relaxed">
-                Every element — the curve of a bench, the depth of a step, the placement of a single lantern — is drawn from the same continuous line.
-              </p>
+    <section className="relative border-y border-border/80 bg-surface/40 px-4 py-5 backdrop-blur-sm md:px-6">
+      <div className="mx-auto max-w-7xl overflow-x-auto">
+        <div className="flex min-w-max items-center gap-6 md:gap-8">
+          {journey.map((item, idx) => (
+            <div key={item} className="flex items-center gap-6 md:gap-8">
+              <span className="font-mono-caps text-foreground/65">{item}</span>
+              {idx < journey.length - 1 ? <span className="h-px w-10 bg-border" /> : null}
             </div>
-            <div className="col-span-12 md:col-span-4 md:col-start-7">
-              <p className="font-mono-caps text-accent/70 mb-4">Time</p>
-              <p className="font-display italic text-foreground/80 leading-relaxed">
-                The site is designed to age slowly. Bronze softens. Stone weathers. The building will look more itself in twenty years than it does today.
-              </p>
-            </div>
-          </div>
-        </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
-function Film() {
+function CollectionSection() {
   return (
-    <section className="relative px-6 py-32">
+    <section id="collection" className="relative bg-background px-6 py-24 md:py-36">
       <div className="mx-auto max-w-7xl">
         <Reveal>
-          <div className="flex items-end justify-between mb-10">
-            <div>
-              <p className="font-mono-caps text-accent/70 mb-4">V · A Moving Portrait</p>
-              <h3 className="font-display text-3xl md:text-5xl">One continuous view.</h3>
-            </div>
-            <span className="font-mono-caps text-foreground/50 hidden md:block">02:14 · silent</span>
-          </div>
+          <p className="font-mono-caps text-accent/80">I · The Collection</p>
         </Reveal>
         <Reveal delay={0.15}>
-          <div className="relative aspect-[16/9] overflow-hidden">
-            <video
-              src={vid3.url}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              className="h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-transparent to-background/50" />
-          </div>
+          <h2 className="mt-5 max-w-4xl font-display text-4xl leading-[1.05] md:text-6xl">
+            Residences as architectural editions,
+            <span className="block italic text-foreground/65">each with its own relationship to light and landscape.</span>
+          </h2>
         </Reveal>
-      </div>
-    </section>
-  );
-}
 
-const residences = [
-  { no: "N° 04", type: "Garden Residence", area: "212 m²", view: "Canopy · Pool", status: "Available" },
-  { no: "N° 07", type: "Sky Residence", area: "268 m²", view: "Coastline · West", status: "Reserved" },
-  { no: "N° 09", type: "Sky Residence", area: "268 m²", view: "Coastline · South", status: "Available" },
-  { no: "N° 12", type: "Crown Residence", area: "384 m²", view: "Panoramic", status: "On Request" },
-  { no: "N° 14", type: "The Pinnacle", area: "612 m²", view: "Full Horizon", status: "Private" },
-];
-
-function Residences() {
-  return (
-    <section id="residences" className="relative px-6 py-32 md:py-48">
-      <div className="mx-auto max-w-7xl">
-        <div className="grid grid-cols-12 gap-8 items-end mb-20">
-          <Reveal className="col-span-12 md:col-span-6">
-            <p className="font-mono-caps text-accent/70 mb-6">VI · Residences</p>
-            <h3 className="font-display text-5xl md:text-7xl leading-[1]">
-              Numbered<br />editions.
-            </h3>
-          </Reveal>
-          <Reveal delay={0.2} className="col-span-12 md:col-span-5 md:col-start-8">
-            <p className="font-display italic text-lg text-foreground/70 leading-relaxed">
-              Eighty-six residences, each recorded by hand. Ownership begins long before possession.
-            </p>
-          </Reveal>
-        </div>
-
-        <div className="border-t border-border">
-          {residences.map((r, i) => (
-            <Reveal key={r.no} delay={i * 0.06}>
-              <a
-                href="#reserve"
-                data-hover
-                className="group grid grid-cols-12 gap-4 py-8 border-b border-border items-baseline transition-colors duration-700 hover:bg-surface/40 px-2 -mx-2"
-              >
-                <span className="col-span-2 font-mono-caps text-accent">{r.no}</span>
-                <span className="col-span-4 font-display text-2xl md:text-3xl text-foreground group-hover:text-accent-soft transition-colors duration-700">
-                  {r.type}
-                </span>
-                <span className="col-span-2 font-mono-caps text-foreground/60">{r.area}</span>
-                <span className="col-span-2 font-display italic text-foreground/70">{r.view}</span>
-                <span className="col-span-2 text-right font-mono-caps text-foreground/50">{r.status}</span>
-              </a>
+        <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-3">
+          {editionData.map((edition, idx) => (
+            <Reveal key={edition.id} delay={idx * 0.08}>
+              <article className="group relative isolate aspect-[4/5] overflow-hidden">
+                <img
+                  src={edition.image}
+                  alt={edition.title}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-[1500ms] ease-out group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/85 via-background/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <p className="font-mono-caps text-accent">{edition.id}</p>
+                  <p className="mt-2 font-display text-3xl italic text-foreground">{edition.title}</p>
+                  <p className="mt-2 font-display italic text-foreground/70">{edition.line}</p>
+                  <p className="mt-4 text-sm text-foreground/55">{edition.detail}</p>
+                </div>
+              </article>
             </Reveal>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
 
-        <Reveal delay={0.2}>
-          <p className="mt-16 max-w-md font-display italic text-foreground/60">
-            Full portfolios and floor studies are issued on request. Each enquiry receives a private introduction.
-          </p>
+function EditionsSection() {
+  const [selected, setSelected] = useState(editionData[0]);
+
+  return (
+    <section id="editions" className="relative px-6 py-24 md:py-36">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 lg:grid-cols-12">
+        <div className="lg:col-span-4">
+          <Reveal>
+            <p className="font-mono-caps text-accent/80">II · Editions</p>
+            <h3 className="mt-5 font-display text-4xl leading-[1.05] md:text-5xl">
+              Numbered pieces in an editorial sequence.
+            </h3>
+            <p className="mt-6 max-w-md font-display italic text-xl text-foreground/70">
+              Selecting an edition begins a continuous movement into residence.
+            </p>
+          </Reveal>
+
+          <div className="mt-10 border-t border-border">
+            {editionData.map((edition, idx) => (
+              <button
+                key={edition.id}
+                type="button"
+                onClick={() => setSelected(edition)}
+                className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-b border-border py-6 text-left"
+                data-hover
+              >
+                <div className="min-w-0">
+                  <p className="font-mono-caps text-foreground/60">{edition.id}</p>
+                  <p className="truncate font-display text-2xl italic text-foreground">{edition.title}</p>
+                </div>
+                <span className={`h-2.5 w-2.5 rounded-full ${selected.id === edition.id ? "bg-accent" : "bg-foreground/30"}`} />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <Reveal delay={0.15} className="lg:col-span-8">
+          <div className="relative aspect-[16/10] overflow-hidden">
+            <img src={selected.image} alt={selected.title} className="h-full w-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/70 to-transparent" />
+            <div className="absolute left-6 right-6 bottom-6 md:left-10 md:right-10 md:bottom-10">
+              <p className="font-mono-caps text-accent">{selected.id}</p>
+              <p className="mt-2 font-display text-4xl italic md:text-5xl">{selected.title}</p>
+              <p className="mt-3 max-w-xl font-display text-xl italic text-foreground/70">{selected.line}</p>
+            </div>
+          </div>
         </Reveal>
       </div>
     </section>
   );
 }
 
-function Balcony() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const scale = useTransform(scrollYProgress, [0, 1], [1.15, 1]);
-  const y = useTransform(scrollYProgress, [0, 1], [0, -80]);
-
+function ResidenceSection() {
   return (
-    <section ref={ref} className="relative h-[100vh] overflow-hidden">
-      <motion.div style={{ scale }} className="absolute inset-0">
-        <img src={terrace.url} alt="Balcony view of the grounds at dusk" className="h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/20 to-transparent" />
-      </motion.div>
-      <motion.div
-        style={{ y }}
-        className="relative z-10 h-full flex items-center px-6 md:px-20 max-w-2xl"
-      >
-        <Reveal>
-          <p className="font-mono-caps text-accent/80 mb-6">VII · Interlude</p>
-          <p className="font-display text-3xl md:text-5xl leading-[1.15] italic text-foreground">
-            "Precision leaves nothing<br />unnecessary."
-          </p>
-          <p className="mt-6 font-mono-caps text-foreground/50">— Studio note, Vol. IV</p>
-        </Reveal>
-      </motion.div>
+    <section id="residence" className="relative py-24 md:py-36">
+      <div className="px-6">
+        <div className="mx-auto max-w-7xl">
+          <Reveal>
+            <p className="font-mono-caps text-accent/80">III · The Residence</p>
+            <h3 className="mt-5 max-w-4xl font-display text-4xl leading-[1.06] md:text-6xl">
+              One uninterrupted walkthrough.
+              <span className="block italic text-foreground/65">Morning enters quietly. Every curve softens light.</span>
+            </h3>
+          </Reveal>
+        </div>
+      </div>
+
+      <Reveal delay={0.2} className="mt-14">
+        <div className="relative aspect-[16/9] w-full overflow-hidden">
+          <video
+            src={vid3.url}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/25 via-transparent to-background/60" />
+        </div>
+      </Reveal>
     </section>
   );
 }
 
-function Reserve() {
+function AtmosphereSection() {
   return (
-    <section id="reserve" className="relative px-6 py-32 md:py-48">
-      <div className="mx-auto max-w-4xl">
+    <section className="relative px-6 py-24 md:py-36">
+      <div className="mx-auto max-w-7xl">
         <Reveal>
-          <p className="font-mono-caps text-accent/70 mb-6 text-center">VIII · Reservation</p>
-        </Reveal>
-        <Reveal delay={0.15}>
-          <h3 className="font-display text-4xl md:text-6xl leading-[1.1] text-center">
-            An introduction,<br />
-            <em className="text-accent-soft">by invitation.</em>
-          </h3>
-        </Reveal>
-        <Reveal delay={0.3}>
-          <p className="mt-8 text-center font-display italic text-foreground/70 max-w-lg mx-auto">
-            Enquiries are received in confidence. A representative of the studio will respond within seventy-two hours.
-          </p>
+          <p className="font-mono-caps text-accent/80">IV · The Atmosphere</p>
+          <h3 className="mt-5 font-display text-4xl leading-[1.05] md:text-5xl">Life is suggested, never staged.</h3>
         </Reveal>
 
-        <Reveal delay={0.45}>
-          <form
-            className="mt-20 space-y-10"
-            onSubmit={(e) => {
-              e.preventDefault();
+        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-12">
+          <Reveal className="md:col-span-8">
+            <figure className="relative aspect-[16/10] overflow-hidden">
+              <img src={balcony.url} alt="Balcony over the estate at dusk" loading="lazy" className="h-full w-full object-cover" />
+            </figure>
+          </Reveal>
+          <Reveal delay={0.1} className="md:col-span-4">
+            <figure className="relative aspect-[4/5] overflow-hidden">
+              <img src={interior.url} alt="Interior with sculptural lines and reflective stone" loading="lazy" className="h-full w-full object-cover" />
+            </figure>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function InvisibleLuxurySection() {
+  const [beam, setBeam] = useState({ x: 50, y: 50 });
+
+  return (
+    <section className="relative px-6 py-24 md:py-36">
+      <div className="mx-auto max-w-7xl">
+        <Reveal>
+          <p className="font-mono-caps text-accent/80">V · Invisible Luxury</p>
+          <h3 className="mt-5 max-w-4xl font-display text-4xl leading-[1.05] md:text-5xl">
+            Luxury is revealed through precision, not ornament.
+          </h3>
+        </Reveal>
+
+        <Reveal delay={0.15}>
+          <div
+            className="relative mt-12 aspect-[16/9] overflow-hidden"
+            onMouseMove={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              setBeam({
+                x: ((e.clientX - rect.left) / rect.width) * 100,
+                y: ((e.clientY - rect.top) / rect.height) * 100,
+              });
             }}
           >
-            {[
-              { id: "name", label: "Name", type: "text" },
-              { id: "email", label: "Correspondence", type: "email" },
-              { id: "residence", label: "Residence of interest", type: "text" },
-            ].map((f) => (
-              <div key={f.id} className="border-b border-border pb-3 focus-within:border-accent transition-colors duration-500">
-                <label htmlFor={f.id} className="block font-mono-caps text-foreground/50 mb-3">
-                  {f.label}
+            <img src={entrance.url} alt="Stone and bronze detailing" loading="lazy" className="h-full w-full object-cover" />
+            <div
+              className="absolute inset-0 transition-opacity duration-500"
+              style={{
+                background: `radial-gradient(420px circle at ${beam.x}% ${beam.y}%, color-mix(in oklab, var(--accent) 18%, transparent), transparent 65%)`,
+              }}
+            />
+            <div className="absolute bottom-6 left-6 right-6 md:bottom-8 md:left-8 md:right-8">
+              <p className="font-mono-caps text-accent">Stone · Bronze · Glass · Timber · Water</p>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function WellbeingSection() {
+  const spaces = [
+    ["Movement Studio", "Filtered morning light and silent floor grids."],
+    ["Sanctuary", "Warm stone, water resonance, low illumination."],
+    ["Water Garden", "Open horizon pools with continuous edge reflections."],
+    ["Library", "Timber-lined stillness designed for long afternoons."],
+    ["Private Salon", "Acoustic calm for confidential conversations."],
+  ];
+
+  return (
+    <section className="relative px-6 py-24 md:py-36">
+      <div className="mx-auto max-w-7xl">
+        <Reveal>
+          <p className="font-mono-caps text-accent/80">VI · Wellbeing</p>
+          <h3 className="mt-5 font-display text-4xl leading-[1.05] md:text-5xl">
+            Wellness presented as architecture.
+          </h3>
+        </Reveal>
+
+        <div className="mt-12 border-t border-border">
+          {spaces.map(([name, description], idx) => (
+            <Reveal key={name} delay={idx * 0.08}>
+              <div className="grid grid-cols-1 gap-4 border-b border-border py-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+                <p className="font-display text-3xl italic text-foreground">{name}</p>
+                <p className="font-display text-xl italic text-foreground/70">{description}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function EstateSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], [80, -80]);
+
+  return (
+    <section id="estate" ref={ref} className="relative px-6 py-24 md:py-36">
+      <div className="mx-auto max-w-7xl">
+        <Reveal>
+          <p className="font-mono-caps text-accent/80">VII · The Estate</p>
+          <h3 className="mt-5 max-w-4xl font-display text-4xl leading-[1.05] md:text-6xl">
+            A single ecosystem from residence to coastline.
+          </h3>
+        </Reveal>
+
+        <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-12">
+          <motion.figure style={{ y }} className="md:col-span-7 aspect-[16/10] overflow-hidden">
+            <img src={estateTop.url} alt="Aerial estate composition" loading="lazy" className="h-full w-full object-cover" />
+          </motion.figure>
+          <motion.figure style={{ y: useTransform(scrollYProgress, [0, 1], [-30, 50]) }} className="md:col-span-5 aspect-[4/5] overflow-hidden md:mt-20">
+            <img src={towerDay.url} alt="Curved residence geometry" loading="lazy" className="h-full w-full object-cover" />
+          </motion.figure>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function AvailabilitySection() {
+  const stateTone = useMemo(
+    () => ({
+      available: "bg-[color:color-mix(in_oklab,var(--accent)_80%,transparent)]",
+      reserved: "bg-foreground/45",
+      sold: "bg-background/90 border border-border",
+      private: "bg-foreground/25",
+    }),
+    [],
+  );
+
+  return (
+    <section id="availability" className="relative px-6 py-24 md:py-36">
+      <div className="mx-auto max-w-7xl">
+        <Reveal>
+          <p className="font-mono-caps text-accent/80">VIII · Availability</p>
+          <h3 className="mt-5 max-w-4xl font-display text-4xl leading-[1.05] md:text-5xl">
+            Night reveals what remains illuminated.
+          </h3>
+        </Reveal>
+
+        <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-12">
+          <Reveal className="lg:col-span-8">
+            <figure className="relative aspect-[16/10] overflow-hidden">
+              <img src={towerNight.url} alt="Cartier tower night elevation" loading="lazy" className="h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent" />
+            </figure>
+          </Reveal>
+          <Reveal delay={0.1} className="lg:col-span-4">
+            <div className="border border-border/80 bg-surface/40 p-6">
+              <p className="font-mono-caps text-foreground/60">Edition states</p>
+              <div className="mt-4 space-y-4">
+                {availability.map((item) => (
+                  <div key={item.id} className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
+                    <span className={`h-2.5 w-2.5 rounded-full ${stateTone[item.state as keyof typeof stateTone]}`} />
+                    <div className="min-w-0">
+                      <p className="truncate font-display text-2xl italic text-foreground">{item.id}</p>
+                      <p className="font-mono-caps text-foreground/55">{item.state}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ReservationSection() {
+  const [submitted, setSubmitted] = useState(false);
+
+  return (
+    <section id="reservation" className="relative overflow-hidden px-6 py-24 md:py-36">
+      <div className="absolute inset-0">
+        <img src={aerial.url} alt="Night aerial Cartier" className="h-full w-full object-cover" loading="lazy" />
+        <div className="absolute inset-0 bg-background/78" />
+      </div>
+
+      <div className="relative mx-auto max-w-4xl">
+        <Reveal>
+          <p className="text-center font-mono-caps text-accent/85">IX · Reservation</p>
+          <h3 className="mt-5 text-center font-display text-4xl leading-[1.08] md:text-6xl">
+            A private introduction, conducted in confidence.
+          </h3>
+        </Reveal>
+
+        <Reveal delay={0.2}>
+          {submitted ? (
+            <div className="mx-auto mt-16 max-w-xl text-center">
+              <p className="font-display text-5xl italic text-foreground">Welcome to Cartier.</p>
+              <p className="mt-5 font-display text-xl italic text-foreground/65">
+                Your private consultation has been received.
+              </p>
+            </div>
+          ) : (
+            <form
+              className="mx-auto mt-16 max-w-2xl space-y-8"
+              onSubmit={(e) => {
+                e.preventDefault();
+                setSubmitted(true);
+              }}
+            >
+              {[
+                { id: "name", label: "Name", type: "text" },
+                { id: "email", label: "Email", type: "email" },
+                { id: "edition", label: "Preferred Edition", type: "text" },
+              ].map((field) => (
+                <div key={field.id} className="border-b border-border pb-3 focus-within:border-accent transition-colors duration-500">
+                  <label htmlFor={field.id} className="mb-3 block font-mono-caps text-foreground/50">
+                    {field.label}
+                  </label>
+                  <input
+                    id={field.id}
+                    type={field.type}
+                    required
+                    className="w-full bg-transparent font-display text-2xl italic text-foreground outline-none placeholder:text-foreground/40"
+                    data-hover
+                  />
+                </div>
+              ))}
+
+              <div className="border-b border-border pb-3 focus-within:border-accent transition-colors duration-500">
+                <label htmlFor="consultation" className="mb-3 block font-mono-caps text-foreground/50">
+                  Private Consultation
                 </label>
-                <input
-                  id={f.id}
-                  type={f.type}
-                  className="w-full bg-transparent font-display text-xl text-foreground focus:outline-none placeholder:text-foreground/30"
+                <textarea
+                  id="consultation"
+                  required
+                  rows={3}
+                  className="w-full resize-none bg-transparent font-display text-xl italic text-foreground outline-none placeholder:text-foreground/40"
                   data-hover
                 />
               </div>
-            ))}
-            <div className="border-b border-border pb-3 focus-within:border-accent transition-colors duration-500">
-              <label htmlFor="note" className="block font-mono-caps text-foreground/50 mb-3">
-                A note
-              </label>
-              <textarea
-                id="note"
-                rows={3}
-                className="w-full bg-transparent font-display italic text-lg text-foreground focus:outline-none resize-none"
-                data-hover
-              />
-            </div>
 
-            <div className="flex justify-center pt-6">
-              <button
-                type="submit"
-                data-hover
-                className="group font-mono-caps text-accent border-b border-accent/40 pb-2 hover:border-accent transition-colors duration-500"
-              >
-                Submit Enquiry <span className="ml-2 inline-block transition-transform duration-700 group-hover:translate-x-1">→</span>
-              </button>
-            </div>
-          </form>
+              <div className="flex justify-center pt-3">
+                <button type="submit" className="border-b border-accent/40 pb-2 font-mono-caps text-accent transition-colors duration-500 hover:border-accent" data-hover>
+                  Send Introduction →
+                </button>
+              </div>
+            </form>
+          )}
         </Reveal>
       </div>
     </section>
@@ -455,36 +517,32 @@ function Reserve() {
 
 function Footer() {
   return (
-    <footer className="relative px-6 pt-32 pb-16 border-t border-border">
-      <div className="mx-auto max-w-7xl grid grid-cols-12 gap-8 items-start">
-        <div className="col-span-12 md:col-span-4 flex flex-col gap-6">
-          <img src={logo.url} alt="Cartier mark" className="h-24 w-auto opacity-90" />
-          <img src={wordmark.url} alt="Cartier" className="h-4 w-auto opacity-80" />
-          <p className="font-display italic text-foreground/60 max-w-xs">
-            An architectural object. Composed for permanence.
+    <footer className="border-t border-border px-6 pb-14 pt-20">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 md:grid-cols-12">
+        <div className="md:col-span-5">
+          <img src={logo.url} alt="Cartier emblem" className="h-20 w-auto opacity-90" loading="lazy" />
+          <img src={wordmark.url} alt="Cartier" className="mt-4 h-4 w-auto opacity-80" loading="lazy" />
+          <p className="mt-5 max-w-sm font-display text-xl italic text-foreground/65">
+            Belonging is not purchased. It is recognized.
           </p>
         </div>
-        <div className="col-span-6 md:col-span-2 md:col-start-7 space-y-3 font-mono-caps text-foreground/60">
-          <p className="text-accent/80 mb-4">Studio</p>
-          <p>Architecture</p>
-          <p>Interiors</p>
-          <p>Landscape</p>
-        </div>
-        <div className="col-span-6 md:col-span-2 space-y-3 font-mono-caps text-foreground/60">
-          <p className="text-accent/80 mb-4">Contact</p>
-          <p>Reservations</p>
-          <p>Press</p>
-          <p>Studio Visits</p>
-        </div>
-        <div className="col-span-12 md:col-span-2 space-y-3 font-mono-caps text-foreground/60">
-          <p className="text-accent/80 mb-4">Location</p>
-          <p>Coastal Reserve</p>
-          <p>Private Access</p>
+        <div className="md:col-span-7 grid grid-cols-2 gap-8 md:grid-cols-3">
+          {[
+            ["Collection", "Editions", "Residence"],
+            ["Atmosphere", "Wellbeing", "Estate"],
+            ["Availability", "Reservation", "Press"],
+          ].map((group, idx) => (
+            <div key={idx} className="space-y-3 font-mono-caps text-foreground/60">
+              {group.map((item) => (
+                <p key={item}>{item}</p>
+              ))}
+            </div>
+          ))}
         </div>
       </div>
-      <div className="mx-auto max-w-7xl mt-24 flex flex-col md:flex-row justify-between gap-4 font-mono-caps text-foreground/40">
-        <span>© MMXXV — Cartier</span>
-        <span>Architecture remembers.</span>
+      <div className="mx-auto mt-16 flex max-w-7xl flex-col gap-2 border-t border-border pt-6 font-mono-caps text-foreground/45 md:flex-row md:items-center md:justify-between">
+        <span>© MMXXV Cartier</span>
+        <span>Architecture remembers every sunrise.</span>
       </div>
     </footer>
   );
@@ -495,15 +553,17 @@ function Index() {
     <main className="relative">
       <SoftCursor />
       <Nav />
-      <Hero />
-      <Manifesto />
-      <Architecture />
-      <Tower />
-      <Grounds />
-      <Film />
-      <Residences />
-      <Balcony />
-      <Reserve />
+      <HeroBelonging />
+      <JourneyRail />
+      <CollectionSection />
+      <EditionsSection />
+      <ResidenceSection />
+      <AtmosphereSection />
+      <InvisibleLuxurySection />
+      <WellbeingSection />
+      <EstateSection />
+      <AvailabilitySection />
+      <ReservationSection />
       <Footer />
     </main>
   );
