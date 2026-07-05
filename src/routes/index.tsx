@@ -121,7 +121,7 @@ function HeroBelonging() {
 function JourneyRail() {
   return (
     <section className="relative border-y border-border/80 bg-surface/40 px-4 py-5 backdrop-blur-sm md:px-6">
-      <div className="mx-auto max-w-7xl overflow-x-auto">
+      <div className="mx-auto max-w-7xl overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <div className="flex min-w-max items-center gap-6 md:gap-8">
           {journey.map((item, idx) => (
             <div key={item} className="flex items-center gap-6 md:gap-8">
