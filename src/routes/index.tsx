@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from "react";
 import { Nav } from "@/components/Nav";
 import { SoftCursor } from "@/components/SoftCursor";
 import { Reveal } from "@/components/Reveal";
+import { LazyVideo } from "@/components/LazyVideo";
 
 export const Route = createFileRoute("/")({ component: Index });
 
@@ -120,7 +121,7 @@ function HeroBelonging() {
 function JourneyRail() {
   return (
     <section className="relative border-y border-border/80 bg-surface/40 px-4 py-5 backdrop-blur-sm md:px-6">
-      <div className="mx-auto max-w-7xl overflow-x-auto">
+      <div className="mx-auto max-w-7xl overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <div className="flex min-w-max items-center gap-6 md:gap-8">
           {journey.map((item, idx) => (
             <div key={item} className="flex items-center gap-6 md:gap-8">
@@ -243,18 +244,11 @@ function ResidenceSection() {
 
       <Reveal delay={0.2} className="mt-14">
         <div className="relative aspect-[16/9] w-full overflow-hidden">
-          <video
-            src={media.vid3}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            className="h-full w-full object-cover"
-          />
+          <LazyVideo src={media.vid3} className="h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/25 via-transparent to-background/60" />
         </div>
       </Reveal>
+
     </section>
   );
 }
@@ -552,7 +546,7 @@ function Footer() {
 
 function Index() {
   return (
-    <main className="relative">
+    <main className="relative overflow-x-hidden">
       <SoftCursor />
       <Nav />
       <HeroBelonging />
