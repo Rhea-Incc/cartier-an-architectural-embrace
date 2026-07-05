@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Analytics } from "@vercel/analytics/react";
+// Load Vercel Analytics only on the client to avoid server-side import issues
 import {
   Outlet,
   Link,
@@ -9,6 +9,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { useState } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -128,7 +129,40 @@ function RootComponent() {
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
       </QueryClientProvider>
-      <Analytics />
+      <ClientAnalytics />
     </>
   );
+}
+
+function ClientAnalytics() {
+  const [AnalyticsComp, setAnalyticsComp] = useState<null | ((props: any) => JSX.Element)>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    import("@vercel/analytics/react")
+      .then((m) => {
+        if (mounted) {
+          // mark and log for diagnostics so we can confirm the client bundle loaded
+          try {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            window.__VERCEL_ANALYTICS_LOADED = true;
+          } catch {}
+          // eslint-disable-next-line no-console
+          console.info("Vercel Analytics client module loaded");
+          setAnalyticsComp(() => m.Analytics);
+        }
+      })
+      .catch((err) => {
+        // surface client-side load errors to the console for debugging
+        // eslint-disable-next-line no-console
+        console.warn("Failed to load @vercel/analytics/react:", err);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (!AnalyticsComp) return null;
+  return <AnalyticsComp />;
 }
