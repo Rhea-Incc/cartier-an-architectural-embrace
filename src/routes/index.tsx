@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from "react";
 import { Nav } from "@/components/Nav";
 import { SoftCursor } from "@/components/SoftCursor";
 import { Reveal } from "@/components/Reveal";
+import { LazyVideo } from "@/components/LazyVideo";
 
 export const Route = createFileRoute("/")({ component: Index });
 
