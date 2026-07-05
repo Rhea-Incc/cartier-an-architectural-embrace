@@ -243,18 +243,11 @@ function ResidenceSection() {
 
       <Reveal delay={0.2} className="mt-14">
         <div className="relative aspect-[16/9] w-full overflow-hidden">
-          <video
-            src={media.vid3}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            className="h-full w-full object-cover"
-          />
+          <LazyVideo src={media.vid3} className="h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/25 via-transparent to-background/60" />
         </div>
       </Reveal>
+
     </section>
   );
 }
